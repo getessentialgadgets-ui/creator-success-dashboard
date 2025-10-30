@@ -6,10 +6,11 @@
  */
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Explicitly set distDir to the default to avoid any environment
-  // or platform-specific override that could lead to a missing
-  // routes-manifest.json during Vercel builds.
-  distDir: '.next',
+  // Workaround: Vercel's builder was looking for a directory named
+  // "Next.js default" (see deploy logs). Set `distDir` to that exact
+  // name so the routes-manifest is written where Vercel expects it.
+  // This is a low-risk workaround to avoid the missing manifest error.
+  distDir: 'Next.js default',
 };
 
 module.exports = nextConfig;
