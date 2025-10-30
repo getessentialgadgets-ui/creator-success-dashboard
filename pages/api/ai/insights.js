@@ -1,5 +1,5 @@
 import cookie from 'cookie'
-import { getMetrics } from '../../lib/whop'
+import { getMetrics } from '../../../lib/whop'
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ ok: false, error: 'Method not allowed' })

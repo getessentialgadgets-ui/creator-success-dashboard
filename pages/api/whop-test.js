@@ -4,7 +4,7 @@
 */
 
 import cookie from 'cookie'
-import { getMetrics, getProfile } from '../../lib/whop'
+import { getMetrics, getProfile } from '../../../lib/whop'
 
 export default async function handler(req, res) {
   try {
