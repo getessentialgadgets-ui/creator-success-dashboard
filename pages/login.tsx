@@ -30,6 +30,8 @@ export default function LoginPage() {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        // include credentials so cookies set by the server are accepted in cross-site iframe contexts
+        credentials: 'include',
         body: JSON.stringify({ email, token }),
       })
       const j = await res.json()

@@ -28,7 +28,8 @@ export default function Dashboard() {
     let mounted = true
     ;(async () => {
       try {
-        const r = await fetch('/api/auth/me')
+        // include credentials so the server receives the whop_token cookie when embedded in Whop (third-party iframe)
+        const r = await fetch('/api/auth/me', { credentials: 'include' })
         const j = await r.json()
         if (mounted && (!j.authenticated)) {
           window.location.href = '/login'
@@ -51,7 +52,8 @@ export default function Dashboard() {
     let mounted = true
     ;(async () => {
       try {
-        const res = await fetch('/api/whop-test')
+        // include credentials so the whop_token cookie is sent along with the request when inside an iframe
+        const res = await fetch('/api/whop-test', { credentials: 'include' })
         const json = await res.json()
         if (mounted) {
           setData(json)

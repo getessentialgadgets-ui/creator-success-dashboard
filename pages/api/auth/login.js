@@ -10,6 +10,13 @@ export default async function handler(req, res) {
   if (!tokenToUse) return res.status(400).json({ ok: false, error: 'Token required' })
 
   // Set a cookie for session (HttpOnly) — simple approach for Codespaces/dev
-  res.setHeader('Set-Cookie', cookie.serialize('whop_token', tokenToUse, { httpOnly: true, path: '/', maxAge: 60 * 60 * 24 * 7 }))
+  // Set cookie for cross-site embedding: SameSite=None and Secure are required
+  res.setHeader('Set-Cookie', cookie.serialize('whop_token', tokenToUse, {
+    httpOnly: true,
+    path: '/',
+    maxAge: 60 * 60 * 24 * 7,
+    sameSite: 'None',
+    secure: true,
+  }))
   return res.status(200).json({ ok: true })
 }
