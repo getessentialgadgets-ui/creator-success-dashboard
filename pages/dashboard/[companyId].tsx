@@ -7,7 +7,7 @@ import { Card, Heading, Text, Container, Badge, Button } from '@whop/react/compo
 // Ensure this page always renders server-side, shows a clear loading/fallback UI,
 // and attempts a best-effort verification using whop token cookie when present.
 
-export default function CompanyDashboard({ companyId, accessVerified, userId }: { companyId: string; accessVerified: boolean; userId?: string }) {
+export default function CompanyDashboard({ companyId, accessVerified, userId, metrics, profile }: { companyId: string; accessVerified: boolean; userId?: string; metrics?: any; profile?: any }) {
   return (
     <Container className="p-4">
       <Card>
@@ -23,7 +23,37 @@ export default function CompanyDashboard({ companyId, accessVerified, userId }: 
           </div>
 
           {accessVerified ? (
-            <Text>Welcome back, user <strong>{userId}</strong>. Your dashboard content will load here.</Text>
+            <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2 flex flex-col gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  <KpiCard title="Active Members" value={metrics?.active?.active ?? '—'} delta="+3% MoM" />
+                  <KpiCard title="MRR" value={`$${((metrics?.mrr?.mrr ?? 0) / 100).toFixed(2)}`} delta="+8% MoM" />
+                  <KpiCard title="Refunds" value={metrics?.refunds?.refunds ?? 0} />
+                  <KpiCard title="Sales (total)" value={metrics?.sales?.totalCount ?? 0} />
+                </div>
+
+                <ChartArea data={metrics} />
+
+                <div>
+                  <TransactionsTable data={metrics?.transactions ?? []} />
+                </div>
+              </div>
+
+              <aside className="flex flex-col gap-4">
+                <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-4">
+                  <h3 className="text-sm text-zinc-400">Profile</h3>
+                  <div className="mt-3 flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-zinc-800" />
+                    <div>
+                      <div className="text-white">{profile?.name ?? 'Creator'}</div>
+                      <div className="text-zinc-500 text-sm">{profile?.email ?? ''}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <AIInsights />
+              </aside>
+            </section>
           ) : (
             <div>
               <Text className="mb-2">You are not authenticated. Use the token postMessage from the parent or paste a token below to continue.</Text>
@@ -65,7 +95,22 @@ export async function getServerSideProps({ req, params }: any) {
     const access = await withTimeout(client.users?.checkAccess?.(companyId, { id: userId }))
     if (!access || access.allowed === false) return { props: { companyId, accessVerified: false } }
 
-    return { props: { companyId, accessVerified: true, userId } }
+    // Fetch useful dashboard data for server-side rendering
+    let metrics = null
+    let profile = null
+    try {
+      // reuse lib helpers
+      // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
+      const { getMetrics, getProfile } = require('../../lib/whop')
+      metrics = await withTimeout(getMetrics(token), 3000)
+      profile = await withTimeout(getProfile(token), 3000)
+    } catch (e) {
+      // best-effort: metrics may be null, but page should still render
+      metrics = null
+      profile = null
+    }
+
+    return { props: { companyId, accessVerified: true, userId, metrics, profile } }
   } catch (err) {
     return { props: { companyId, accessVerified: false } }
   }
