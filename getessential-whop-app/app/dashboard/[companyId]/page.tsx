@@ -88,9 +88,9 @@ export default async function DashboardPage({ params }: Props) {
                 <div>
                   <Heading size={3}>Creator Success Dashboard</Heading>
                   <Text className="mt-1 text-gray-500">Company ID: <strong>{companyId}</strong></Text>
-                  <div className="mt-2 flex items-center gap-2">
-                    <Badge tone="caution">Preview</Badge>
-                    <Text className="text-sm text-gray-400">Read-only preview mode</Text>
+                  <div className="mt-2">
+                    {/* @ts-expect-error server rendering client component */}
+                    <div style={{ marginTop: 6 }}><span style={{ padding: '4px 8px', borderRadius: 6, background: '#FFD54F', color: '#000', fontWeight: 600 }}>Embedded preview — read-only</span></div>
                   </div>
                 </div>
 

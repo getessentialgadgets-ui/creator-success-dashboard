@@ -15,6 +15,7 @@ import KpiCard from '../../components/KpiCard'
 import ChartArea from '../../components/ChartArea'
 import TransactionsTable from '../../components/TransactionsTable'
 import AIInsights from '../../components/AIInsights'
+import EmbedPreviewBanner from '../../components/EmbedPreviewBanner'
 
 // Ensure this page always renders server-side, shows a clear loading/fallback UI,
 // and attempts a best-effort verification using whop token cookie when present.
@@ -39,9 +40,15 @@ export default function CompanyDashboard({ companyId, accessVerified, userId, me
             <div>
               <Heading size={3}>Creator Success Dashboard</Heading>
               <Text className="text-sm text-gray-500">Company ID: <strong>{companyId}</strong></Text>
+              {embedPreview && (
+                // @ts-expect-error client
+                <div className="mt-2"><EmbedPreviewBanner text="Embedded preview — read-only" /></div>
+              )}
             </div>
             <div className="flex items-center gap-2">
-              {accessVerified ? <Badge tone="positive">Access verified</Badge> : embedPreview ? <Badge tone="caution">Preview</Badge> : <Badge tone="caution">Not verified</Badge>}
+              {accessVerified ? <Badge tone="positive">Access verified</Badge> : embedPreview ? (
+                <Badge tone="caution">Preview</Badge>
+              ) : <Badge tone="caution">Not verified</Badge>}
             </div>
           </div>
 

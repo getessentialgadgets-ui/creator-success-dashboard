@@ -34,8 +34,17 @@ export default function ExperiencePage({ experience, access, embedPreview }: { e
     return (
       <Container className="p-6">
         <Card>
-          <Heading size={4}>{preview.title}</Heading>
-          <Text className="text-sm text-gray-500 mt-2">ID: {preview.id}</Text>
+          <div className="flex items-center justify-between">
+            <div>
+              <Heading size={4}>{preview.title}</Heading>
+              <Text className="text-sm text-gray-500 mt-2">ID: {preview.id}</Text>
+            </div>
+            <div>
+              {/* @ts-expect-error client */}
+              <EmbedPreviewBanner text="Embedded preview — read-only" />
+            </div>
+          </div>
+
           <div className="mt-4">
             <Text>{preview.description}</Text>
           </div>
