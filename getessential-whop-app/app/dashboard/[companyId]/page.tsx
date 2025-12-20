@@ -73,7 +73,48 @@ export default async function DashboardPage({ params }: Props) {
     );
   } catch (err: any) {
     // If verification times out or fails, show a clear fallback and interactive token listener.
-    // This ensures the page always renders and never hangs inside an iframe.
+    // When embedded inside Whop, prefer showing a read-only preview so the iframe doesn't remain blank.
+    const referer = String(hdrs.get('referer') || '')
+    const isIframeHeader = hdrs.get('sec-fetch-dest') === 'iframe' || hdrs.get('x-whop-embed') === '1'
+    const isEmbed = !!(referer.includes('whop.com') || referer.includes('whop.app') || isIframeHeader || referer.includes('embed=1'))
+
+    if (isEmbed) {
+      // Render a static preview read-only dashboard
+      return (
+        <Container className="p-4">
+          <div className="max-w-4xl mx-auto">
+            <Card>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <Heading size={3}>Creator Success Dashboard</Heading>
+                  <Text className="mt-1 text-gray-500">Company ID: <strong>{companyId}</strong></Text>
+                  <div className="mt-2 flex items-center gap-2">
+                    <Badge tone="caution">Preview</Badge>
+                    <Text className="text-sm text-gray-400">Read-only preview mode</Text>
+                  </div>
+                </div>
+
+                <div className="flex gap-2">
+                  <Button variant="classic" size={2} as="a" href="/">Open App</Button>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <Text>This preview shows sample metrics and layout when embedded in Whop.</Text>
+
+                <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-zinc-900 p-4 rounded-lg">Active Members: <strong>128</strong></div>
+                  <div className="bg-zinc-900 p-4 rounded-lg">MRR: <strong>$1,299.00</strong></div>
+                  <div className="bg-zinc-900 p-4 rounded-lg">Sales: <strong>412</strong></div>
+                </div>
+
+              </div>
+            </Card>
+          </div>
+        </Container>
+      );
+    }
+
     return (
       <Container className="p-4">
         <Card tone="critical">

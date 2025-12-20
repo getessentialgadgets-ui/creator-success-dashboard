@@ -10,6 +10,7 @@
     },
     "dependencies": {
         "@whop/sdk": "^0.0.2",
+        "@whop/react": "0.3.0",
         "axios": "^1.5.0",
         "chart.js": "^4.4.0",
         "clsx": "^1.2.1",

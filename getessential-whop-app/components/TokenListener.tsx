@@ -68,7 +68,7 @@ export default function TokenListener() {
           <button onClick={submitManual} className="px-3 py-1 bg-blue-600 text-white rounded">Use token</button>
         </div>
         <div className="text-sm text-gray-600">Status: {status ?? 'waiting for token...'}</div>
-        <div className="text-xs text-gray-400 mt-2">Tip: parent can postMessage({"type":"WHOP_TOKEN","token":"..."}) to the iframe to login automatically (origin must be whop.com or localhost).</div>
+        <div className="text-xs text-gray-400 mt-2">Tip: parent can postMessage(<code>{'{"type":"WHOP_TOKEN","token":"..."}'}</code>) to the iframe to login automatically (origin must be whop.com or localhost).</div>
       </div>
     </div>
   )
