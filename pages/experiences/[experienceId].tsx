@@ -1,6 +1,7 @@
 import React from 'react'
 import { parse } from 'cookie'
 import { createWhopClient } from '../../lib/whop'
+import EmbedPreviewBanner from '../../components/EmbedPreviewBanner'
 // Local UI primitives so SSR doesn't import heavier UI packages
 const Container = ({ children, className = '' }: any) => <div className={className}>{children}</div>
 const Card = ({ children, className = '' }: any) => <div className={`bg-zinc-900 rounded-xl border border-zinc-800 p-4 ${className}`}>{children}</div>
@@ -40,7 +41,6 @@ export default function ExperiencePage({ experience, access, embedPreview }: { e
               <Text className="text-sm text-gray-500 mt-2">ID: {preview.id}</Text>
             </div>
             <div>
-              {/* @ts-expect-error client */}
               <EmbedPreviewBanner text="Embedded preview — read-only" />
             </div>
           </div>

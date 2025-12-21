@@ -1,7 +1,8 @@
 import React from 'react'
 import { parse } from 'cookie'
 import { createWhopClient } from '../../lib/whop'
-import TokenListener from '../../getessential-whop-app/components/TokenListener'
+import dynamic from 'next/dynamic'
+const TokenListener = dynamic(() => import('../../getessential-whop-app/components/TokenListener'), { ssr: false })
 // Avoid importing large UI libs on the server (can cause ESM directory import errors).
 // Provide small, local primitive wrappers so server-side rendering remains robust.
 const Container = ({ children, className = '' }: any) => <div className={className}>{children}</div>
@@ -41,7 +42,6 @@ export default function CompanyDashboard({ companyId, accessVerified, userId, me
               <Heading size={3}>Creator Success Dashboard</Heading>
               <Text className="text-sm text-gray-500">Company ID: <strong>{companyId}</strong></Text>
               {embedPreview && (
-                // @ts-expect-error client
                 <div className="mt-2"><EmbedPreviewBanner text="Embedded preview — read-only" /></div>
               )}
             </div>
@@ -119,7 +119,7 @@ export default function CompanyDashboard({ companyId, accessVerified, userId, me
           ) : (
             <div>
               <Text className="mb-2">You are not authenticated. Use the token postMessage from the parent or paste a token below to continue.</Text>
-              {/* @ts-expect-error Client component */}
+
               <TokenListener />
             </div>
           )}
