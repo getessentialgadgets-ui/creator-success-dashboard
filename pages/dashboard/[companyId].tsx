@@ -28,10 +28,13 @@ export default function CompanyDashboard({ companyId, accessVerified, userId, me
     refunds: { refunds: 1 },
     sales: { totalCount: 412 },
     transactions: [
-      { id: 'txn_1', amount: 2999, date: '2025-12-01' },
-      { id: 'txn_2', amount: 4999, date: '2025-11-28' }
+      { id: 'txn_1', amount: 2999, currency: 'USD', createdAt: '2025-12-01T12:00:00Z', customerEmail: null, status: 'completed' },
+      { id: 'txn_2', amount: 4999, currency: 'USD', createdAt: '2025-11-28T11:30:00Z', customerEmail: null, status: 'completed' }
     ]
   }
+
+  // Explicit preview chart data compatible with ChartArea's expected type
+  const previewChartData: { date: string; value: number }[] = Array.from({ length: 8 }).map((_, i) => ({ date: `M-${8 - i}`, value: Math.round(Math.random() * 5000) }))
 
   return (
     <Container className="p-4">
@@ -94,7 +97,7 @@ export default function CompanyDashboard({ companyId, accessVerified, userId, me
                   <KpiCard title="Sales (total)" value={previewMetrics.sales.totalCount} />
                 </div>
 
-                <ChartArea data={previewMetrics} />
+                <ChartArea data={previewChartData} />
 
                 <div>
                   <TransactionsTable data={previewMetrics.transactions} />
