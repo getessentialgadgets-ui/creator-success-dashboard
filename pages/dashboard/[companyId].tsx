@@ -70,6 +70,13 @@ export default function CompanyDashboard({ companyId, accessVerified, userId, me
                 <div>
                   <TransactionsTable data={metrics?.transactions ?? []} />
                 </div>
+
+                {/* Retention cohorts component */}
+                <div>
+                  {/* Client component; fetches cohorts for the company */}
+                  {/* eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports */}
+                  { (function(){ const RetentionCohort = require('../../components/RetentionCohort').default; return <RetentionCohort companyId={companyId} /> })() }
+                </div>
               </div>
 
               <aside className="flex flex-col gap-4">
